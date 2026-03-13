@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LocShare — Share Location</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --surface2: #1e1e1e;
+        --border: #2a2a2a;
+        --accent: #c8f542;
+        --accent-dim: #a0c430;
+        --text: #f0f0f0;
+        --muted: #666;
+        --fail: #f56042;
+        --pass: #42f5a7;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Syne", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.35;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .card {
+        position: relative;
+        z-index: 1;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        max-width: 420px;
+        width: 100%;
+        text-align: center;
+      }
+      .ping-wrap {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 1.75rem;
+      }
+      .ping-wrap::before,
+      .ping-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        animation: ping 2s ease-out infinite;
+      }
+      .ping-wrap::after {
+        animation-delay: 1s;
+      }
+      .ping-dot {
+        position: absolute;
+        inset: 18px;
+        background: var(--accent);
+        border-radius: 50%;
+      }
+      @keyframes ping {
+        0% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(2.2);
+          opacity: 0;
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin-bottom: 0.4rem;
+        animation: fadeUp 0.4s ease both;
+      }
+      .subtitle {
+        font-size: 0.82rem;
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        animation: fadeUp 0.4s ease 0.05s both;
+      }
+
+      .status-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+        animation: fadeUp 0.4s ease 0.1s both;
+      }
+      .status-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+      }
+      .status-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+      }
+      .status-desc {
+        font-size: 0.75rem;
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        line-height: 1.6;
+      }
+
+      .loc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .loc-cell {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.65rem 0.75rem;
+        text-align: left;
+      }
+      .loc-cell-label {
+        font-size: 0.6rem;
+        font-family: "DM Mono", monospace;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+      }
+      .loc-cell-value {
+        font-size: 0.82rem;
+        font-family: "DM Mono", monospace;
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      button {
+        font-family: "DM Mono", monospace;
+        font-size: 0.82rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        color: var(--text);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          transform 0.1s;
+        width: 100%;
+      }
+      button:hover {
+        background: var(--border);
+      }
+      button:active {
+        transform: scale(0.98);
+      }
+      button.primary {
+        background: var(--accent);
+        color: #0a0a0a;
+        border-color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      button.primary:hover {
+        background: var(--accent-dim);
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      button.danger {
+        border-color: var(--fail);
+        color: var(--fail);
+        background: transparent;
+      }
+      button.danger:hover {
+        background: rgba(245, 96, 66, 0.08);
+      }
+
+      .sharing-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: rgba(66, 245, 167, 0.08);
+        border: 1px solid rgba(66, 245, 167, 0.3);
+        border-radius: 100px;
+        padding: 0.3rem 0.9rem;
+        font-family: "DM Mono", monospace;
+        font-size: 0.72rem;
+        color: var(--pass);
+        margin-bottom: 1rem;
+      }
+      .sharing-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--pass);
+        animation: glow 1.4s ease-in-out infinite;
+      }
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(66, 245, 167, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 0 5px rgba(66, 245, 167, 0);
+        }
+      }
+
+      .privacy {
+        font-size: 0.68rem;
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        margin-top: 1.25rem;
+        line-height: 1.6;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+
+      #loadingState,
+      #errorState,
+      #sharingState,
+      #successState {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="ping-wrap"><div class="ping-dot"></div></div>
+      <h1>Share Your Location</h1>
+      <p class="subtitle">
+        Someone wants to see where you are.<br />Your location is shared
+        directly — no server stores it.
+      </p>
+
+      <!-- Init -->
+      <div id="initState">
+        <div class="status-card">
+          <div class="status-icon">📍</div>
+          <div class="status-title">Allow location access</div>
+          <div class="status-desc">
+            Tap the button below. Your browser will ask for permission — tap
+            Allow.
+          </div>
+        </div>
+        <button class="primary" onclick="startSharing()">
+          Share My Location
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div id="loadingState">
+        <div class="status-card">
+          <div class="status-desc">Connecting and getting your location…</div>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div id="errorState">
+        <div class="status-card" style="border-color: rgba(245, 96, 66, 0.3)">
+          <div class="status-icon">⚠</div>
+          <div class="status-title" style="color: var(--fail)" id="errTitle">
+            Something went wrong
+          </div>
+          <div class="status-desc" id="errDesc"></div>
+        </div>
+        <button class="primary" onclick="startSharing()">Try Again</button>
+      </div>
+
+      <!-- Sharing -->
+      <div id="sharingState">
+        <div class="sharing-badge">
+          <span class="sharing-dot"></span>Sharing live
+        </div>
+        <div class="loc-grid">
+          <div class="loc-cell">
+            <div class="loc-cell-label">Latitude</div>
+            <div class="loc-cell-value" id="dispLat">—</div>
+          </div>
+          <div class="loc-cell">
+            <div class="loc-cell-label">Longitude</div>
+            <div class="loc-cell-value" id="dispLon">—</div>
+          </div>
+          <div class="loc-cell" style="grid-column: span 2">
+            <div class="loc-cell-label">Accuracy</div>
+            <div class="loc-cell-value" id="dispAcc">—</div>
+          </div>
+        </div>
+        <div class="status-desc" style="margin-bottom: 1rem">
+          Your location is being sent directly to the viewer.
+        </div>
+        <button class="danger" onclick="stopSharing()">Stop Sharing</button>
+      </div>
+
+      <!-- Stopped -->
+      <div id="successState">
+        <div class="status-card">
+          <div class="status-icon">✓</div>
+          <div class="status-title">Sharing stopped</div>
+          <div class="status-desc">
+            Your location is no longer being shared.
+          </div>
+        </div>
+      </div>
+
+      <div class="privacy">
+        🔒 For educational purposes. Location is sent peer-to-peer directly to
+        the viewer's browser — nothing is stored on any server.
+      </div>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const peerId = params.get("peer"); // viewer's peer ID
+
+      let peer = null;
+      let conn = null;
+      let watchId = null;
+
+      if (!peerId)
+        showError(
+          "No session ID",
+          "This link is missing a session ID. Ask for a new link.",
+        );
+
+      function show(id) {
+        [
+          "initState",
+          "loadingState",
+          "errorState",
+          "sharingState",
+          "successState",
+        ].forEach((s) => {
+          document.getElementById(s).style.display =
+            s === id ? "block" : "none";
+        });
+      }
+
+      function showError(title, desc) {
+        document.getElementById("errTitle").textContent = title;
+        document.getElementById("errDesc").textContent = desc;
+        show("errorState");
+      }
+
+      function startSharing() {
+        if (!peerId) return;
+        show("loadingState");
+
+        // Create our own peer then connect to viewer's peer
+        peer = new Peer({ debug: 0 });
+
+        peer.on("open", () => {
+          conn = peer.connect(peerId, { reliable: true });
+
+          conn.on("open", () => {
+            // Connection established — now get location
+            getLocation();
+          });
+
+          conn.on("error", (err) => showError("Connection error", err.message));
+        });
+
+        peer.on("error", (err) => {
+          // Common error: viewer peer not found (session expired)
+          if (err.type === "peer-unavailable") {
+            showError(
+              "Session not found",
+              "The viewer may have closed their page. Ask them to generate a new link.",
+            );
+          } else {
+            showError("Connection failed", err.message);
+          }
+        });
+      }
+
+      function getLocation() {
+        if (!navigator.geolocation) {
+          showError(
+            "Not supported",
+            "Your browser doesn't support geolocation.",
+          );
+          return;
+        }
+
+        // Stage 1 — fast approximate location
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            sendCoords(pos.coords);
+
+            // Stage 2 — refine with GPS silently
+            navigator.geolocation.getCurrentPosition(
+              (pos2) => {
+                if (pos2.coords.accuracy < pos.coords.accuracy)
+                  sendCoords(pos2.coords);
+              },
+              () => {},
+              { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+            );
+
+            // Watch for movement updates
+            watchId = navigator.geolocation.watchPosition(
+              (pos3) => sendCoords(pos3.coords),
+              () => {},
+              { enableHighAccuracy: true },
+            );
+          },
+          (err) => {
+            const msgs = {
+              1: "Permission denied. Please allow location access.",
+              2: "Position unavailable.",
+              3: "Timed out. Try again.",
+            };
+            showError("Location error", msgs[err.code] || "Unknown error.");
+          },
+          { enableHighAccuracy: false, timeout: 8000, maximumAge: 30000 },
+        );
+      }
+
+      function sendCoords(coords) {
+        const { latitude: lat, longitude: lon, accuracy } = coords;
+
+        if (conn && conn.open) {
+          conn.send({
+            type: "location",
+            lat,
+            lon,
+            accuracy,
+            timestamp: new Date().toISOString(),
+          });
+        }
+
+        document.getElementById("dispLat").textContent = lat.toFixed(6);
+        document.getElementById("dispLon").textContent = lon.toFixed(6);
+        document.getElementById("dispAcc").textContent =
+          `±${Math.round(accuracy)} m`;
+        show("sharingState");
+      }
+
+      function stopSharing() {
+        if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+        if (conn) conn.close();
+        if (peer) peer.destroy();
+        show("successState");
+      }
+    </script>
+  </body>
+</html>
