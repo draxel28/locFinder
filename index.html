@@ -444,10 +444,7 @@
 
         peer.on("open", (id) => {
           // Build the sender URL using our peer ID
-          const base = window.location.href.replace(
-            "viewer.html",
-            "sender.html",
-          );
+          const base = `${window.location.origin}/sender.html`;
           sessionLink = `${base}?peer=${id}`;
 
           document.getElementById("shareLink").textContent = sessionLink;
