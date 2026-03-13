@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta property="og:title" content="Hey! Check this out 👀" />
-    <meta property="og:description" content="Tap to open" />
+    <meta property="og:title" content="Drexel misses you 🌸" />
+    <meta property="og:description" content="Hey Maxinne… where are you? 💕" />
     <meta
       property="og:image"
       content="https://loc-finder.vercel.app/preview.jpg"
@@ -14,10 +14,9 @@
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>LocShare — Share Location</title>
+    <title>Drexel misses you 🌸</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,600;1,400&family=Nunito:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -30,137 +29,164 @@
         padding: 0;
       }
       :root {
-        --bg: #0a0a0a;
-        --surface: #141414;
-        --surface2: #1e1e1e;
-        --border: #2a2a2a;
-        --accent: #c8f542;
-        --accent-dim: #a0c430;
-        --text: #f0f0f0;
-        --muted: #666;
-        --fail: #f56042;
-        --pass: #42f5a7;
+        --bg: #fff0f5;
+        --surface: #ffffff;
+        --surface2: #fce8f0;
+        --border: #f4c2d8;
+        --accent: #e8587a;
+        --accent-dim: #d44068;
+        --accent-light: #fde8ef;
+        --text: #3d1a26;
+        --muted: #b07088;
+        --pass: #e8587a;
+        --fail: #c0392b;
       }
+
       body {
         background: var(--bg);
         color: var(--text);
-        font-family: "Syne", sans-serif;
+        font-family: "Nunito", sans-serif;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 2rem 1rem;
+        position: relative;
+        overflow: hidden;
       }
-      body::before {
-        content: "";
+
+      /* floating hearts background */
+      .hearts-bg {
         position: fixed;
         inset: 0;
-        background-image:
-          linear-gradient(var(--border) 1px, transparent 1px),
-          linear-gradient(90deg, var(--border) 1px, transparent 1px);
-        background-size: 40px 40px;
-        opacity: 0.35;
         pointer-events: none;
         z-index: 0;
+        overflow: hidden;
       }
+
+      .heart {
+        position: absolute;
+        font-size: 1.2rem;
+        opacity: 0;
+        animation: floatUp linear infinite;
+      }
+
+      @keyframes floatUp {
+        0% {
+          opacity: 0;
+          transform: translateY(0) scale(0.8) rotate(-10deg);
+        }
+        10% {
+          opacity: 0.4;
+        }
+        90% {
+          opacity: 0.15;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-100vh) scale(1.1) rotate(10deg);
+        }
+      }
+
+      /* card */
       .card {
         position: relative;
         z-index: 1;
         background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        padding: 2.5rem 2rem;
-        max-width: 420px;
+        border: 1.5px solid var(--border);
+        border-radius: 28px;
+        padding: 2.75rem 2.25rem;
+        max-width: 400px;
         width: 100%;
         text-align: center;
+        box-shadow:
+          0 8px 40px rgba(232, 88, 122, 0.12),
+          0 2px 8px rgba(232, 88, 122, 0.08);
       }
-      .ping-wrap {
-        position: relative;
-        width: 72px;
-        height: 72px;
-        margin: 0 auto 1.75rem;
+
+      /* top deco */
+      .top-deco {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+        animation: heartbeat 1.8s ease-in-out infinite;
       }
-      .ping-wrap::before,
-      .ping-wrap::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        border: 2px solid var(--accent);
-        animation: ping 2s ease-out infinite;
-      }
-      .ping-wrap::after {
-        animation-delay: 1s;
-      }
-      .ping-dot {
-        position: absolute;
-        inset: 18px;
-        background: var(--accent);
-        border-radius: 50%;
-      }
-      @keyframes ping {
-        0% {
-          transform: scale(1);
-          opacity: 0.6;
-        }
+
+      @keyframes heartbeat {
+        0%,
         100% {
-          transform: scale(2.2);
-          opacity: 0;
+          transform: scale(1);
+        }
+        15% {
+          transform: scale(1.18);
+        }
+        30% {
+          transform: scale(1);
+        }
+        45% {
+          transform: scale(1.1);
         }
       }
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
+
+      .from-label {
+        font-family: "DM Mono", monospace;
+        font-size: 0.68rem;
+        color: var(--muted);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
       }
 
       h1 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-        margin-bottom: 0.4rem;
-        animation: fadeUp 0.4s ease both;
-      }
-      .subtitle {
-        font-size: 0.82rem;
-        color: var(--muted);
-        font-family: "DM Mono", monospace;
-        margin-bottom: 2rem;
-        line-height: 1.6;
-        animation: fadeUp 0.4s ease 0.05s both;
+        font-family: "Playfair Display", serif;
+        font-size: 1.9rem;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
       }
 
+      h1 span {
+        font-style: italic;
+        color: var(--accent);
+      }
+
+      .subtitle {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 2rem;
+      }
+
+      /* status card */
       .status-card {
         background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
         padding: 1.25rem;
         margin-bottom: 1.25rem;
-        animation: fadeUp 0.4s ease 0.1s both;
       }
+
       .status-icon {
         font-size: 2rem;
         margin-bottom: 0.5rem;
         line-height: 1;
       }
       .status-title {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 700;
         margin-bottom: 0.3rem;
+        color: var(--text);
       }
       .status-desc {
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         color: var(--muted);
-        font-family: "DM Mono", monospace;
         line-height: 1.6;
       }
 
+      /* location cells */
       .loc-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -169,8 +195,8 @@
       }
       .loc-cell {
         background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
         padding: 0.65rem 0.75rem;
         text-align: left;
       }
@@ -186,90 +212,141 @@
         font-size: 0.82rem;
         font-family: "DM Mono", monospace;
         color: var(--accent);
-        font-weight: 500;
+        font-weight: 600;
       }
 
+      /* buttons */
       button {
-        font-family: "DM Mono", monospace;
-        font-size: 0.82rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        background: var(--surface2);
-        color: var(--text);
-        cursor: pointer;
-        transition:
-          background 0.15s,
-          transform 0.1s;
-        width: 100%;
-      }
-      button:hover {
-        background: var(--border);
-      }
-      button:active {
-        transform: scale(0.98);
-      }
-      button.primary {
-        background: var(--accent);
-        color: #0a0a0a;
-        border-color: var(--accent);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.9rem;
         font-weight: 700;
+        padding: 0.85rem 1.5rem;
+        border-radius: 100px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+
+      button.primary {
+        background: linear-gradient(135deg, #f472a0, #e8587a);
+        color: #fff;
+        box-shadow: 0 4px 18px rgba(232, 88, 122, 0.35);
         margin-bottom: 0.5rem;
       }
+
       button.primary:hover {
-        background: var(--accent-dim);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(232, 88, 122, 0.45);
       }
-      button:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-      button.danger {
-        border-color: var(--fail);
-        color: var(--fail);
-        background: transparent;
-      }
-      button.danger:hover {
-        background: rgba(245, 96, 66, 0.08);
+      button.primary:active {
+        transform: scale(0.97);
       }
 
+      button.danger {
+        background: transparent;
+        color: var(--muted);
+        border: 1.5px solid var(--border);
+        font-size: 0.82rem;
+      }
+      button.danger:hover {
+        background: var(--surface2);
+      }
+
+      /* sharing badge */
       .sharing-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        background: rgba(66, 245, 167, 0.08);
-        border: 1px solid rgba(66, 245, 167, 0.3);
+        gap: 0.45rem;
+        background: #fff0f5;
+        border: 1.5px solid var(--border);
         border-radius: 100px;
-        padding: 0.3rem 0.9rem;
-        font-family: "DM Mono", monospace;
-        font-size: 0.72rem;
-        color: var(--pass);
+        padding: 0.3rem 1rem;
+        font-size: 0.75rem;
+        color: var(--accent);
+        font-weight: 600;
         margin-bottom: 1rem;
       }
+
       .sharing-dot {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: var(--pass);
+        background: var(--accent);
         animation: glow 1.4s ease-in-out infinite;
       }
+
       @keyframes glow {
         0%,
         100% {
-          box-shadow: 0 0 0 0 rgba(66, 245, 167, 0.5);
+          box-shadow: 0 0 0 0 rgba(232, 88, 122, 0.5);
         }
         50% {
-          box-shadow: 0 0 0 5px rgba(66, 245, 167, 0);
+          box-shadow: 0 0 0 5px rgba(232, 88, 122, 0);
         }
       }
 
+      /* divider */
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 1.25rem 0;
+        color: var(--border);
+        font-size: 0.75rem;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* privacy */
       .privacy {
-        font-size: 0.68rem;
+        font-size: 0.65rem;
         color: var(--muted);
         font-family: "DM Mono", monospace;
         margin-top: 1.25rem;
         line-height: 1.6;
         padding-top: 1rem;
-        border-top: 1px solid var(--border);
+        border-top: 1.5px solid var(--border);
+      }
+
+      /* petal animation for success */
+      @keyframes petalFall {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px) rotate(0deg);
+        }
+        20% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(60px) rotate(180deg);
+        }
+      }
+
+      .petals span {
+        display: inline-block;
+        animation: petalFall 1.5s ease forwards;
+        font-size: 1.1rem;
+      }
+      .petals span:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .petals span:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .petals span:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .petals span:nth-child(5) {
+        animation-delay: 0.4s;
       }
 
       #loadingState,
@@ -281,52 +358,60 @@
     </style>
   </head>
   <body>
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
     <div class="card">
-      <div class="ping-wrap"><div class="ping-dot"></div></div>
-      <h1>Share Your Location</h1>
-      <p class="subtitle">
-        Someone wants to see where you are.<br />Your location is shared
-        directly — no server stores it.
-      </p>
+      <div class="top-deco">💗</div>
+      <p class="from-label">from Drexel</p>
 
       <!-- Init -->
       <div id="initState">
+        <h1>Hey <span>Maxinne</span>,</h1>
+        <p class="subtitle">
+          I miss you so much 🥺<br />Can you let me know where you are?
+        </p>
         <div class="status-card">
           <div class="status-icon">📍</div>
-          <div class="status-title">Allow location access</div>
+          <div class="status-title">Share your location</div>
           <div class="status-desc">
-            Tap the button below. Your browser will ask for permission — tap
-            Allow.
+            Just tap the button below and allow location access — it goes
+            straight to me, no one else. 💕
           </div>
         </div>
         <button class="primary" onclick="startSharing()">
-          Share My Location
+          Send my location to Drexel 💌
         </button>
       </div>
 
       <!-- Loading -->
       <div id="loadingState">
+        <h1>Hold on <span>love</span>…</h1>
+        <p class="subtitle">Getting your location 🌸</p>
         <div class="status-card">
-          <div class="status-desc">Connecting and getting your location…</div>
+          <div class="status-icon">🔍</div>
+          <div class="status-desc">Connecting to Drexel and finding you…</div>
         </div>
       </div>
 
       <!-- Error -->
       <div id="errorState">
-        <div class="status-card" style="border-color: rgba(245, 96, 66, 0.3)">
-          <div class="status-icon">⚠</div>
-          <div class="status-title" style="color: var(--fail)" id="errTitle">
-            Something went wrong
-          </div>
+        <h1>Oops <span>Maxinne</span> 🥺</h1>
+        <p class="subtitle">Something didn't work…</p>
+        <div class="status-card" style="border-color: #f4c2c2">
+          <div class="status-icon">💔</div>
+          <div class="status-title" id="errTitle">Something went wrong</div>
           <div class="status-desc" id="errDesc"></div>
         </div>
-        <button class="primary" onclick="startSharing()">Try Again</button>
+        <button class="primary" onclick="startSharing()">Try again 💕</button>
       </div>
 
       <!-- Sharing -->
       <div id="sharingState">
+        <h1><span>Sent!</span> 💌</h1>
+        <p class="subtitle">Drexel can see where you are now 🗺️</p>
         <div class="sharing-badge">
-          <span class="sharing-dot"></span>Sharing live
+          <span class="sharing-dot"></span> Live location sharing
         </div>
         <div class="loc-grid">
           <div class="loc-cell">
@@ -342,32 +427,53 @@
             <div class="loc-cell-value" id="dispAcc">—</div>
           </div>
         </div>
-        <div class="status-desc" style="margin-bottom: 1rem">
-          Your location is being sent directly to the viewer.
-        </div>
-        <button class="danger" onclick="stopSharing()">Stop Sharing</button>
+        <div class="divider">💗</div>
+        <button class="danger" onclick="stopSharing()">Stop sharing</button>
       </div>
 
       <!-- Stopped -->
       <div id="successState">
+        <div class="petals">
+          <span>🌸</span><span>🌸</span><span>🌸</span><span>🌸</span
+          ><span>🌸</span>
+        </div>
+        <h1>Take <span>care</span> 🌸</h1>
+        <p class="subtitle">
+          Location sharing stopped.<br />Drexel loves you 💕
+        </p>
         <div class="status-card">
-          <div class="status-icon">✓</div>
-          <div class="status-title">Sharing stopped</div>
+          <div class="status-icon">🩷</div>
           <div class="status-desc">
-            Your location is no longer being shared.
+            Your location is no longer being shared. You can close this page.
           </div>
         </div>
       </div>
 
-      <div class="privacy">
-        🔒 For educational purposes. Location is sent peer-to-peer directly to
-        the viewer's browser — nothing is stored on any server.
-      </div>
+      <p class="privacy">
+        🔒 Location is sent peer-to-peer directly to Drexel's browser — nothing
+        is stored on any server. For educational purposes only.
+      </p>
     </div>
 
     <script>
+      // ── Floating hearts ──────────────────────────────────
+      const bg = document.getElementById("heartsBg");
+      const emojis = ["🩷", "💗", "💕", "🌸", "💖", "✨", "🌷"];
+      for (let i = 0; i < 18; i++) {
+        const span = document.createElement("span");
+        span.className = "heart";
+        span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        span.style.left = `${Math.random() * 100}%`;
+        span.style.bottom = `-10%`;
+        span.style.animationDuration = `${6 + Math.random() * 8}s`;
+        span.style.animationDelay = `${Math.random() * 8}s`;
+        span.style.fontSize = `${0.8 + Math.random() * 1.2}rem`;
+        bg.appendChild(span);
+      }
+
+      // ── PeerJS ───────────────────────────────────────────
       const params = new URLSearchParams(window.location.search);
-      const peerId = params.get("peer"); // viewer's peer ID
+      const peerId = params.get("peer");
 
       let peer = null;
       let conn = null;
@@ -375,8 +481,8 @@
 
       if (!peerId)
         showError(
-          "No session ID",
-          "This link is missing a session ID. Ask for a new link.",
+          "No session found",
+          "This link is missing a session ID. Ask Drexel for a new link 💕",
         );
 
       function show(id) {
@@ -402,29 +508,24 @@
         if (!peerId) return;
         show("loadingState");
 
-        // Create our own peer then connect to viewer's peer
         peer = new Peer({ debug: 0 });
 
         peer.on("open", () => {
           conn = peer.connect(peerId, { reliable: true });
-
-          conn.on("open", () => {
-            // Connection established — now get location
-            getLocation();
-          });
-
-          conn.on("error", (err) => showError("Connection error", err.message));
+          conn.on("open", () => getLocation());
+          conn.on("error", (err) =>
+            showError("Connection error 💔", err.message),
+          );
         });
 
         peer.on("error", (err) => {
-          // Common error: viewer peer not found (session expired)
           if (err.type === "peer-unavailable") {
             showError(
-              "Session not found",
-              "The viewer may have closed their page. Ask them to generate a new link.",
+              "Drexel isn't online yet 🥺",
+              "Ask him to open his viewer page first, then tap try again.",
             );
           } else {
-            showError("Connection failed", err.message);
+            showError("Something went wrong 💔", err.message);
           }
         });
       }
@@ -432,18 +533,16 @@
       function getLocation() {
         if (!navigator.geolocation) {
           showError(
-            "Not supported",
-            "Your browser doesn't support geolocation.",
+            "Not supported 😢",
+            "Your browser doesn't support location sharing.",
           );
           return;
         }
 
-        // Stage 1 — fast approximate location
         navigator.geolocation.getCurrentPosition(
           (pos) => {
             sendCoords(pos.coords);
-
-            // Stage 2 — refine with GPS silently
+            // Refine with GPS silently
             navigator.geolocation.getCurrentPosition(
               (pos2) => {
                 if (pos2.coords.accuracy < pos.coords.accuracy)
@@ -452,8 +551,7 @@
               () => {},
               { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
             );
-
-            // Watch for movement updates
+            // Watch for movement
             watchId = navigator.geolocation.watchPosition(
               (pos3) => sendCoords(pos3.coords),
               () => {},
@@ -462,9 +560,9 @@
           },
           (err) => {
             const msgs = {
-              1: "Permission denied. Please allow location access.",
-              2: "Position unavailable.",
-              3: "Timed out. Try again.",
+              1: "You denied location access 🥺 Please allow it in your browser settings and try again.",
+              2: "Couldn't find your position. Check your connection and try again.",
+              3: "Timed out. Please try again 💕",
             };
             showError("Location error", msgs[err.code] || "Unknown error.");
           },
@@ -474,7 +572,6 @@
 
       function sendCoords(coords) {
         const { latitude: lat, longitude: lon, accuracy } = coords;
-
         if (conn && conn.open) {
           conn.send({
             type: "location",
@@ -484,7 +581,6 @@
             timestamp: new Date().toISOString(),
           });
         }
-
         document.getElementById("dispLat").textContent = lat.toFixed(6);
         document.getElementById("dispLon").textContent = lon.toFixed(6);
         document.getElementById("dispAcc").textContent =
