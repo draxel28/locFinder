@@ -35,11 +35,8 @@
         --border: #f4c2d8;
         --accent: #e8587a;
         --accent-dim: #d44068;
-        --accent-light: #fde8ef;
         --text: #3d1a26;
         --muted: #b07088;
-        --pass: #e8587a;
-        --fail: #c0392b;
       }
 
       body {
@@ -56,7 +53,6 @@
         overflow: hidden;
       }
 
-      /* floating hearts background */
       .hearts-bg {
         position: fixed;
         inset: 0;
@@ -64,14 +60,11 @@
         z-index: 0;
         overflow: hidden;
       }
-
       .heart {
         position: absolute;
-        font-size: 1.2rem;
         opacity: 0;
         animation: floatUp linear infinite;
       }
-
       @keyframes floatUp {
         0% {
           opacity: 0;
@@ -89,7 +82,6 @@
         }
       }
 
-      /* card */
       .card {
         position: relative;
         z-index: 1;
@@ -100,19 +92,15 @@
         max-width: 400px;
         width: 100%;
         text-align: center;
-        box-shadow:
-          0 8px 40px rgba(232, 88, 122, 0.12),
-          0 2px 8px rgba(232, 88, 122, 0.08);
+        box-shadow: 0 8px 40px rgba(232, 88, 122, 0.12);
       }
 
-      /* top deco */
       .top-deco {
         font-size: 2.5rem;
         margin-bottom: 0.5rem;
         line-height: 1;
         animation: heartbeat 1.8s ease-in-out infinite;
       }
-
       @keyframes heartbeat {
         0%,
         100% {
@@ -147,7 +135,6 @@
         line-height: 1.2;
         margin-bottom: 0.5rem;
       }
-
       h1 span {
         font-style: italic;
         color: var(--accent);
@@ -160,7 +147,6 @@
         margin-bottom: 2rem;
       }
 
-      /* status card */
       .status-card {
         background: var(--surface2);
         border: 1.5px solid var(--border);
@@ -168,7 +154,6 @@
         padding: 1.25rem;
         margin-bottom: 1.25rem;
       }
-
       .status-icon {
         font-size: 2rem;
         margin-bottom: 0.5rem;
@@ -186,7 +171,6 @@
         line-height: 1.6;
       }
 
-      /* location cells */
       .loc-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -215,7 +199,6 @@
         font-weight: 600;
       }
 
-      /* buttons */
       button {
         font-family: "Nunito", sans-serif;
         font-size: 0.9rem;
@@ -229,14 +212,12 @@
           transform 0.15s,
           box-shadow 0.15s;
       }
-
       button.primary {
         background: linear-gradient(135deg, #f472a0, #e8587a);
         color: #fff;
         box-shadow: 0 4px 18px rgba(232, 88, 122, 0.35);
         margin-bottom: 0.5rem;
       }
-
       button.primary:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 24px rgba(232, 88, 122, 0.45);
@@ -244,18 +225,20 @@
       button.primary:active {
         transform: scale(0.97);
       }
-
-      button.danger {
+      button.secondary {
         background: transparent;
         color: var(--muted);
         border: 1.5px solid var(--border);
         font-size: 0.82rem;
       }
-      button.danger:hover {
+      button.secondary:hover {
         background: var(--surface2);
       }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
 
-      /* sharing badge */
       .sharing-badge {
         display: inline-flex;
         align-items: center;
@@ -269,7 +252,6 @@
         font-weight: 600;
         margin-bottom: 1rem;
       }
-
       .sharing-dot {
         width: 7px;
         height: 7px;
@@ -277,7 +259,6 @@
         background: var(--accent);
         animation: glow 1.4s ease-in-out infinite;
       }
-
       @keyframes glow {
         0%,
         100% {
@@ -288,7 +269,89 @@
         }
       }
 
-      /* divider */
+      /* ── Message box ── */
+      .msg-box {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+      .msg-label {
+        font-size: 0.7rem;
+        font-family: "DM Mono", monospace;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      textarea {
+        width: 100%;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        padding: 0.65rem 0.9rem;
+        color: var(--text);
+        font-family: "Nunito", sans-serif;
+        font-size: 0.85rem;
+        outline: none;
+        resize: none;
+        line-height: 1.5;
+        transition: border-color 0.15s;
+        min-height: 80px;
+      }
+      textarea:focus {
+        border-color: var(--accent);
+      }
+      textarea::placeholder {
+        color: var(--muted);
+      }
+
+      .msg-send-row {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .msg-send-row button {
+        flex: 1;
+        padding: 0.6rem 1rem;
+        font-size: 0.82rem;
+      }
+      #msgSentNote {
+        font-size: 0.72rem;
+        color: var(--accent);
+        font-weight: 600;
+        margin-top: 0.4rem;
+        min-height: 1rem;
+        text-align: center;
+      }
+
+      /* sent messages history */
+      .sent-history {
+        margin-top: 0.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .sent-bubble {
+        background: linear-gradient(135deg, #f472a0, #e8587a);
+        color: #fff;
+        border-radius: 12px 12px 4px 12px;
+        padding: 0.5rem 0.85rem;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        text-align: left;
+        align-self: flex-end;
+        max-width: 90%;
+        box-shadow: 0 2px 8px rgba(232, 88, 122, 0.2);
+      }
+      .sent-time {
+        font-size: 0.62rem;
+        opacity: 0.7;
+        margin-top: 2px;
+      }
+
       .divider {
         display: flex;
         align-items: center;
@@ -305,7 +368,6 @@
         background: var(--border);
       }
 
-      /* privacy */
       .privacy {
         font-size: 0.65rem;
         color: var(--muted);
@@ -316,7 +378,6 @@
         border-top: 1.5px solid var(--border);
       }
 
-      /* petal animation for success */
       @keyframes petalFall {
         0% {
           opacity: 0;
@@ -330,7 +391,6 @@
           transform: translateY(60px) rotate(180deg);
         }
       }
-
       .petals span {
         display: inline-block;
         animation: petalFall 1.5s ease forwards;
@@ -358,7 +418,6 @@
     </style>
   </head>
   <body>
-    <!-- Floating hearts background -->
     <div class="hearts-bg" id="heartsBg"></div>
 
     <div class="card">
@@ -375,8 +434,8 @@
           <div class="status-icon">📍</div>
           <div class="status-title">Share your location</div>
           <div class="status-desc">
-            Just tap the button below and allow location access — it goes
-            straight to me, no one else. 💕
+            Tap the button and allow location access — it goes straight to
+            Drexel, no one else. 💕
           </div>
         </div>
         <button class="primary" onclick="startSharing()">
@@ -409,10 +468,11 @@
       <!-- Sharing -->
       <div id="sharingState">
         <h1><span>Sent!</span> 💌</h1>
-        <p class="subtitle">Drexel can see where you are now 🗺️</p>
+        <p class="subtitle">Drexel can see where you are 🗺️</p>
         <div class="sharing-badge">
-          <span class="sharing-dot"></span> Live location sharing
+          <span class="sharing-dot"></span>Live location sharing
         </div>
+
         <div class="loc-grid">
           <div class="loc-cell">
             <div class="loc-cell-label">Latitude</div>
@@ -427,8 +487,27 @@
             <div class="loc-cell-value" id="dispAcc">—</div>
           </div>
         </div>
-        <div class="divider">💗</div>
-        <button class="danger" onclick="stopSharing()">Stop sharing</button>
+
+        <div class="divider">💌</div>
+
+        <!-- Message box -->
+        <div class="msg-box">
+          <div class="msg-label">Send a message to Drexel</div>
+          <textarea
+            id="msgInput"
+            placeholder="Type something sweet… 🌸"
+            maxlength="200"
+          ></textarea>
+          <div class="msg-send-row">
+            <button class="primary" onclick="sendMessage()" id="sendMsgBtn">
+              Send 💕
+            </button>
+          </div>
+          <div id="msgSentNote"></div>
+          <div class="sent-history" id="sentHistory"></div>
+        </div>
+
+        <button class="secondary" onclick="stopSharing()">Stop sharing</button>
       </div>
 
       <!-- Stopped -->
@@ -450,8 +529,8 @@
       </div>
 
       <p class="privacy">
-        🔒 Location is sent peer-to-peer directly to Drexel's browser — nothing
-        is stored on any server. For educational purposes only.
+        🔒 Location & messages are sent peer-to-peer directly to Drexel's
+        browser — nothing is stored on any server.
       </p>
     </div>
 
@@ -542,7 +621,6 @@
         navigator.geolocation.getCurrentPosition(
           (pos) => {
             sendCoords(pos.coords);
-            // Refine with GPS silently
             navigator.geolocation.getCurrentPosition(
               (pos2) => {
                 if (pos2.coords.accuracy < pos.coords.accuracy)
@@ -551,7 +629,6 @@
               () => {},
               { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
             );
-            // Watch for movement
             watchId = navigator.geolocation.watchPosition(
               (pos3) => sendCoords(pos3.coords),
               () => {},
@@ -560,8 +637,8 @@
           },
           (err) => {
             const msgs = {
-              1: "You denied location access 🥺 Please allow it in your browser settings and try again.",
-              2: "Couldn't find your position. Check your connection and try again.",
+              1: "You denied location access 🥺 Please allow it in your browser settings.",
+              2: "Couldn't find your position.",
               3: "Timed out. Please try again 💕",
             };
             showError("Location error", msgs[err.code] || "Unknown error.");
@@ -587,6 +664,49 @@
           `±${Math.round(accuracy)} m`;
         show("sharingState");
       }
+
+      // ── Messaging ────────────────────────────────────────
+      function sendMessage() {
+        const input = document.getElementById("msgInput");
+        const text = input.value.trim();
+        if (!text) return;
+        if (!conn || !conn.open) {
+          document.getElementById("msgSentNote").textContent =
+            "⚠ Not connected to Drexel yet.";
+          return;
+        }
+
+        conn.send({
+          type: "message",
+          text,
+          timestamp: new Date().toISOString(),
+        });
+
+        // Show sent bubble in history
+        const history = document.getElementById("sentHistory");
+        const bubble = document.createElement("div");
+        bubble.className = "sent-bubble";
+        bubble.innerHTML = `${text}<div class="sent-time">${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>`;
+        history.appendChild(bubble);
+        history.scrollTop = history.scrollHeight;
+
+        // Confirm note
+        const note = document.getElementById("msgSentNote");
+        note.textContent = "💕 Message sent to Drexel!";
+        setTimeout(() => (note.textContent = ""), 2500);
+
+        input.value = "";
+      }
+
+      // Send on Enter (Shift+Enter for new line)
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("msgInput").addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
+        });
+      });
 
       function stopSharing() {
         if (watchId !== null) navigator.geolocation.clearWatch(watchId);
